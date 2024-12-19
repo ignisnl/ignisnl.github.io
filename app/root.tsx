@@ -9,25 +9,27 @@ import {
 
 import type { Route } from "./+types/root";
 
-import { CssBaseline } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Container,
+  CssBaseline,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  ThemeProvider,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import type React from "react";
-
-export const links: Route.LinksFunction = () => [
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
-  },
-  {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
-  },
-];
+import MaterialBodyContainer from "~/components/MaterialBodyContainer";
+import materialTheme from "~/theme";
 
 function Document({ children }: { children: React.ReactNode }) {
   return (
@@ -37,10 +39,18 @@ function Document({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        {/* TODO: Remove below script and related files once migrated from GitHub Pages */}
         <script src="/spa_redirect.js" />
       </head>
       <body>
-        {children}
+        <AppBar position="sticky">
+          <Toolbar>Lorenzo Grillo</Toolbar>
+        </AppBar>
+        <Box sx={{ containerType: "inline-size" }}>
+          <MaterialBodyContainer component="main">
+            {children}
+          </MaterialBodyContainer>
+        </Box>
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -50,10 +60,10 @@ function Document({ children }: { children: React.ReactNode }) {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <ThemeProvider theme={materialTheme}>
       <CssBaseline enableColorScheme />
       <Document>{children}</Document>
-    </>
+    </ThemeProvider>
   );
 }
 
