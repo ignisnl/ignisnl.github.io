@@ -66,7 +66,7 @@ function Document({ children }: { children: React.ReactNode }) {
     noSsr: true,
   });
 
-  const drawer = (
+  const drawerList = (
     <>
       {mdAndAbove && (
         <>
@@ -78,18 +78,20 @@ function Document({ children }: { children: React.ReactNode }) {
           <Divider />
         </>
       )}
-      <List>
-        <ListItem>
-          <ListItemButton component={NavLink} to="/">
-            <ListItemText>Home</ListItemText>
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton component={NavLink} to="/marks">
-            <ListItemText>Marks</ListItemText>
-          </ListItemButton>
-        </ListItem>
-      </List>
+      <Box role="presentation" onClick={handleDrawerClose}>
+        <List>
+          <ListItem>
+            <ListItemButton component={NavLink} to="/">
+              <ListItemText>Home</ListItemText>
+            </ListItemButton>
+          </ListItem>
+          <ListItem>
+            <ListItemButton component={NavLink} to="/marks">
+              <ListItemText>Marks</ListItemText>
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </Box>
     </>
   );
   const drawerWidth = 256;
@@ -147,7 +149,7 @@ function Document({ children }: { children: React.ReactNode }) {
                 sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
                 PaperProps={{ sx: { width: drawerWidth } }}
               >
-                {drawer}
+                {drawerList}
               </Drawer>
             </Box>
           ) : (
@@ -161,7 +163,7 @@ function Document({ children }: { children: React.ReactNode }) {
               ModalProps={{ keepMounted: true }}
               PaperProps={{ sx: { width: drawerWidth } }}
             >
-              {drawer}
+              {drawerList}
             </Drawer>
           )}
 
