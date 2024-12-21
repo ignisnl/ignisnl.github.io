@@ -2,6 +2,7 @@ import {
   isRouteErrorResponse,
   Links,
   Meta,
+  NavLink,
   Outlet,
   Scripts,
   ScrollRestoration,
@@ -12,9 +13,10 @@ import type { Route } from "./+types/root";
 import {
   AppBar,
   Box,
-  Container,
   CssBaseline,
+  Divider,
   Drawer,
+  IconButton,
   List,
   ListItem,
   ListItemButton,
@@ -22,6 +24,7 @@ import {
   ThemeProvider,
   Toolbar,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -30,8 +33,60 @@ import "@fontsource/roboto/700.css";
 import type React from "react";
 import MaterialBodyContainer from "~/components/MaterialBodyContainer";
 import materialTheme from "~/theme";
+import { useState } from "react";
+import MenuIcon from "@mui/icons-material/Menu";
 
 function Document({ children }: { children: React.ReactNode }) {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+
+  const handleDrawerClose = () => {
+    setIsClosing(true);
+    setMobileOpen(false);
+  };
+
+  const handleDrawerTransitionEnd = () => {
+    setIsClosing(false);
+  };
+
+  const handleDrawerToggle = () => {
+    if (!isClosing) {
+      setMobileOpen(!mobileOpen);
+    }
+  };
+
+  const mdAndAbove = useMediaQuery((theme) => theme.breakpoints.up("md"), {
+    noSsr: true,
+  });
+
+  const drawer = (
+    <>
+      {mdAndAbove && (
+        <>
+          <Toolbar>
+            <Typography variant="h5" component="h1">
+              Lorenzo Grillo
+            </Typography>
+          </Toolbar>
+          <Divider />
+        </>
+      )}
+      <List>
+        <ListItem>
+          <ListItemButton component={NavLink} to="/">
+            <ListItemText>Home</ListItemText>
+          </ListItemButton>
+        </ListItem>
+        <ListItem>
+          <ListItemButton component={NavLink} to="/marks">
+            <ListItemText>Marks</ListItemText>
+          </ListItemButton>
+        </ListItem>
+      </List>
+    </>
+  );
+  const drawerWidth = 256;
+
   return (
     <html lang="en">
       <head>
@@ -43,13 +98,78 @@ function Document({ children }: { children: React.ReactNode }) {
         <script src="/spa_redirect.js" />
       </head>
       <body>
-        <AppBar position="sticky">
-          <Toolbar>Lorenzo Grillo</Toolbar>
-        </AppBar>
-        <Box sx={{ containerType: "inline-size" }}>
-          <MaterialBodyContainer component="main">
-            {children}
-          </MaterialBodyContainer>
+        <Box
+          sx={{
+            display: "flex",
+            containerType: "inline-size",
+            containerName: "viewport",
+          }}
+        >
+          <AppBar
+            position="fixed"
+            sx={{
+              width: { md: `calc(100% - ${drawerWidth}px)` },
+              ml: { md: `${drawerWidth}px` },
+            }}
+          >
+            <Toolbar>
+              {!mdAndAbove && (
+                <>
+                  <IconButton
+                    color="inherit"
+                    aria-label="open menu"
+                    edge="start"
+                    onClick={handleDrawerToggle}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <Typography variant="h4" component="h1" sx={{ flexGrow: 1 }}>
+                    Lorenzo Grillo
+                  </Typography>
+                </>
+              )}
+            </Toolbar>
+          </AppBar>
+
+          {mdAndAbove ? (
+            <Box component="nav">
+              <Drawer
+                variant="permanent"
+                open
+                sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
+                PaperProps={{ sx: { width: drawerWidth } }}
+              >
+                {drawer}
+              </Drawer>
+            </Box>
+          ) : (
+            <Drawer
+              component="nav"
+              variant="temporary"
+              open={mobileOpen}
+              onClose={handleDrawerClose}
+              onTransitionEnd={handleDrawerTransitionEnd}
+              sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
+              ModalProps={{ keepMounted: true }}
+              PaperProps={{ sx: { width: drawerWidth } }}
+            >
+              {drawer}
+            </Drawer>
+          )}
+
+          <Box
+            sx={{
+              flex: 1,
+              width: { md: `calc(100% - ${drawerWidth}px)` },
+              mx: "auto",
+              maxWidth: 1392,
+            }}
+          >
+            <Toolbar />
+            <MaterialBodyContainer component="main">
+              {children}
+            </MaterialBodyContainer>
+          </Box>
         </Box>
         <ScrollRestoration />
         <Scripts />

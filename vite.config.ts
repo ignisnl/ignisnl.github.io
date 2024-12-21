@@ -10,4 +10,7 @@ export default defineConfig({
     },
   },
   plugins: [reactRouter(), tsconfigPaths()],
+  ssr: {
+    noExternal: ["@mui/icons-material"],
+  },
 });
