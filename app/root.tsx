@@ -16,6 +16,7 @@ import {
   CssBaseline,
   Divider,
   Drawer,
+  Icon,
   IconButton,
   List,
   ListItem,
@@ -34,7 +35,13 @@ import type React from "react";
 import MaterialBodyContainer from "~/components/MaterialBodyContainer";
 import materialTheme from "~/theme";
 import { useState } from "react";
-import MenuIcon from "@mui/icons-material/Menu";
+
+export const links: Route.LinksFunction = () => [
+  {
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/icon?family=Material+Icons",
+  },
+];
 
 function Document({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -121,7 +128,8 @@ function Document({ children }: { children: React.ReactNode }) {
                     edge="start"
                     onClick={handleDrawerToggle}
                   >
-                    <MenuIcon />
+                    {/* TODO: replace with SVG icon once migrated from GitHub Pages */}
+                    <Icon>menu</Icon>
                   </IconButton>
                   <Typography variant="h4" component="h1" sx={{ flexGrow: 1 }}>
                     Lorenzo Grillo
